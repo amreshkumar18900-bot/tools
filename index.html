@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>All-in-One Tools Hub — Ultra Luxury</title>
+  <meta name="description" content="All-in-One Tools Hub — PDF, Image, Currency, AI summaries. Luxury UI with Blue/Gold theme." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f3f8ff; --card:#ffffff; --accent:#0b66d1; --gold:#d4af37; --muted:#6b7280;
+    }
+    body{font-family:Inter,system-ui,-apple-system; margin:0; background:linear-gradient(180deg,var(--bg),#eef6ff); color:#0b1b2b}
+    header{position:sticky; top:0; z-index:40; background:rgba(255,255,255,0.8); backdrop-filter:blur(6px); display:flex; justify-content:space-between; align-items:center; padding:12px 24px; box-shadow:0 8px 30px rgba(6,20,40,0.06)}
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(180deg,var(--accent),#083a8a);display:grid;place-items:center;color:white;font-weight:700}
+    .title{font-weight:700;font-size:18px}
+    .actions{display:flex;gap:8px;align-items:center}
+    button{padding:8px 12px;border-radius:10px;border:none;background:var(--accent);color:white;cursor:pointer}
+    .wrap{max-width:1120px;margin:20px auto;padding:16px}
+    .hero{background:linear-gradient(135deg,#0b66d1,#0a3d62); color:white;border-radius:16px;padding:28px;display:flex;gap:20px;align-items:center}
+    .hero-left{flex:1}
+    .hero h1{margin:0;font-size:26px}
+    .hero p{margin:6px 0 0;color:rgba(255,255,255,0.9)}
+    .search{margin-top:16px;display:flex;gap:8px}
+    .search input{flex:1;padding:12px;border-radius:12px;border:none}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:600px){.grid{grid-template-columns:1fr}.hero{flex-direction:column}}
+    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 8px 26px rgba(12,24,50,0.06);cursor:pointer;transition:transform .18s}
+    .card:hover{transform:translateY(-6px)}
+    .card h3{margin:0 0 6px}
+    .muted{color:var(--muted);font-size:14px}
+    .tool-panel{margin-top:18px;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(12,24,50,0.06)}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .input, .select{width:100%;padding:10px;border-radius:10px;border:1px solid #e6eefc;background:transparent}
+    .ad-slot{margin:14px 0;padding:12px;border-radius:10px;border:2px dashed rgba(11,66,209,0.15);text-align:center;color:var(--muted)}
+    footer{margin-top:30px;padding:18px;border-radius:12px;text-align:center;color:var(--muted)}
+    .gold{color:var(--gold);font-weight:700}
+    .hidden{display:none}
+    
+    /* Additional styles for enhanced UI */
+    .progress-bar {width:100%;height:6px;background:#e6eefc;border-radius:3px;margin:10px 0;overflow:hidden}
+    .progress-fill {height:100%;background:var(--accent);width:0%;transition:width 0.3s}
+    .result-box {background:#f8fafc;border-radius:10px;padding:14px;margin-top:12px}
+    .success {color:#10b981}
+    .error {color:#ef4444}
+    .loading {opacity:0.7;pointer-events:none}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">AH</div>
+      <div>
+        <div class="title">All-in-One Tools Hub</div>
+        <div class="muted">Ultra luxury • Blue & Gold</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="toggleTheme">Dark</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-left">
+        <h1>Convert • Compress • Format • Analyse</h1>
+        <p>PDF, Image, Currency & AI-powered summaries — fast, secure and mobile-first.</p>
+
+        <div class="search">
+          <input id="globalSearch" placeholder="Search tools - e.g. pdf, image, currency..." />
+          <button id="goSearch">Search</button>
+        </div>
+
+        <div style="margin-top:14px" class="muted">AdSense slot below — replace with your ad unit.</div>
+      </div>
+
+      <div style="width:320px">
+        <div class="ad-slot">Top Ad Slot (AdSense placeholder)</div>
+        <div style="margin-top:12px">
+          <div class="muted">Gemini AI: can summarize & explain converted files.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" id="toolGrid" aria-label="Tools">
+      <div class="card" onclick="openTool('pdf')">
+        <h3>PDF → Word</h3>
+        <div class="muted">Convert PDF to editable Word (.docx)</div>
+      </div>
+      <div class="card" onclick="openTool('removebg')">
+        <h3>Remove Background</h3>
+        <div class="muted">Remove image background using remove.bg</div>
+      </div>
+      <div class="card" onclick="openTool('compress')">
+        <h3>Compress Image</h3>
+        <div class="muted">Compress images via TinyPNG</div>
+      </div>
+
+      <div class="card" onclick="openTool('currency')">
+        <h3>Currency Converter</h3>
+        <div class="muted">Live exchange rates</div>
+      </div>
+
+      <div class="card" onclick="openTool('ai')">
+        <h3>AI Assistant (Gemini)</h3>
+        <div class="muted">Generate summary / explain converted files</div>
+      </div>
+
+      <div class="card" onclick="openTool('emi')">
+        <h3>EMI Calculator</h3>
+        <div class="muted">Loan EMI & amortization</div>
+      </div>
+      
+      <div class="card" onclick="openTool('qr')">
+        <h3>QR Code Generator</h3>
+        <div class="muted">Create QR codes from text or URLs</div>
+      </div>
+      
+      <div class="card" onclick="openTool('password')">
+        <h3>Password Generator</h3>
+        <div class="muted">Create strong, secure passwords</div>
+      </div>
+      
+      <div class="card" onclick="openTool('notepad')">
+        <h3>Online Notepad</h3>
+        <div class="muted">Simple text editor with auto-save</div>
+      </div>
+    </section>
+
+    <div id="panelContainer"></div>
+
+    <footer>
+      <div>© 2025 All-in-One Tools Hub • Built for Amaresh</div>
+      <div class="muted">Sitemap | Privacy | Terms</div>
+    </footer>
+  </main>
+
+  <script>
+    // --- small UI helpers
+    let dark = false;
+    document.getElementById('toggleTheme').onclick = ()=>{
+      dark = !dark;
+      document.body.style.background = dark ? '#071427' : '';
+      document.body.style.color = dark ? '#e6eefc' : '';
+      document.getElementById('toggleTheme').innerText = dark ? 'Light' : 'Dark';
+    };
+
+    // Search functionality
+    document.getElementById('goSearch').addEventListener('click', performSearch);
+    document.getElementById('globalSearch').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') performSearch();
+    });
+    
+    function performSearch() {
+      const query = document.getElementById('globalSearch').value.trim().toLowerCase();
+      if (query) {
+        const cards = document.querySelectorAll('.card');
+        let found = false;
+        
+        cards.forEach(card => {
+          const title = card.querySelector('h3').textContent.toLowerCase();
+          const desc = card.querySelector('.muted').textContent.toLowerCase();
+          
+          if (title.includes(query) || desc.includes(query)) {
+            card.style.display = 'block';
+            found = true;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        
+        if (!found) {
+          alert(`No tools found for "${query}". Try a different search term.`);
+          // Reset display
+          cards.forEach(card => card.style.display = 'block');
+        }
+      } else {
+        // Reset display if search is empty
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => card.style.display = 'block');
+      }
+    }
+
+    function openTool(id){
+      const container = document.getElementById('panelContainer');
+      if(id==='pdf'){
+        container.innerHTML = pdfPanelHTML();
+      } else if(id==='removebg'){
+        container.innerHTML = removeBgHTML();
+      } else if(id==='compress'){
+        container.innerHTML = compressHTML();
+      } else if(id==='currency'){
+        container.innerHTML = currencyHTML();
+      } else if(id==='ai'){
+        container.innerHTML = aiHTML();
+      } else if(id==='emi'){
+        container.innerHTML = emiHTML();
+      } else if(id==='qr'){
+        container.innerHTML = qrHTML();
+      } else if(id==='password'){
+        container.innerHTML = passwordHTML();
+      } else if(id==='notepad'){
+        container.innerHTML = notepadHTML();
+      }
+      attachToolEvents(id);
+      window.scrollTo({top: document.getElementById('panelContainer').offsetTop - 20, behavior:'smooth'});
+    }
+
+    // --- panel HTMLs
+    function pdfPanelHTML(){
+      return `
+        <div class="tool-panel" id="pdfPanel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><h2>📄 PDF → Word</h2><div class="muted">Upload PDF and convert to DOCX (client-side simulation)</div></div>
+            <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+          </div>
+
+          <div style="margin-top:12px" class="row">
+            <div class="col">
+              <label class="muted">Choose PDF</label>
+              <input id="pdfFile" type="file" accept="application/pdf" class="input"/>
+              <div style="margin-top:10px"><button id="pdfConvertBtn">Convert</button></div>
+              <div class="progress-bar"><div id="pdfProgress" class="progress-fill"></div></div>
+              <div id="pdfStatus" class="muted" style="margin-top:10px"></div>
+            </div>
+            <div class="col">
+              <label class="muted">AI Summary (optional)</label>
+              <textarea id="pdfSummaryInput" class="input" placeholder="After conversion, click 'Get Summary' to let Gemini summarize the document..." style="min-height:140px"></textarea>
+              <div style="margin-top:8px"><button id="pdfSummaryBtn">Get Summary (Gemini)</button></div>
+              <div id="pdfSummaryOutput" style="margin-top:10px;white-space:pre-wrap" class="muted result-box"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function removeBgHTML(){
+      return `
+        <div class="tool-panel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><h2>🖼️ Remove Background</h2><div class="muted">Upload image and remove background (client-side simulation)</div></div>
+            <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+          </div>
+
+          <div style="margin-top:12px" class="row">
+            <div class="col">
+              <label class="muted">Choose Image</label>
+              <input id="bgFile" type="file" accept="image/*" class="input"/>
+              <div style="margin-top:8px"><button id="removeBgBtn">Remove Background</button></div>
+              <div class="progress-bar"><div id="bgProgress" class="progress-fill"></div></div>
+              <div id="bgStatus" class="muted" style="margin-top:8px"></div>
+            </div>
+            <div class="col">
+              <img id="bgPreview" style="max-width:100%;border-radius:10px;display:none"/>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function compressHTML(){
+      return `
+      <div class="tool-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><h2>📉 Compress Image</h2><div class="muted">Client-side compression simulation</div></div>
+          <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+        </div>
+        <div style="margin-top:12px" class="row">
+          <div class="col">
+            <label class="muted">Choose Image</label>
+            <input id="compressFile" type="file" accept="image/*" class="input"/>
+            <div style="margin-top:8px"><button id="compressBtn">Compress</button></div>
+            <div class="progress-bar"><div id="compressProgress" class="progress-fill"></div></div>
+            <div id="compressStatus" class="muted" style="margin-top:8px"></div>
+          </div>
+          <div class="col">
+            <img id="compressPreview" style="max-width:100%;border-radius:10px;display:none"/>
+            <a id="compressDownload" class="muted" style="display:block;margin-top:8px"></a>
+          </div>
+        </div>
+      </div>
+      `;
+    }
+
+    function currencyHTML(){
+      return `
+      <div class="tool-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><h2>💱 Currency Converter</h2><div class="muted">Live rates via ExchangeRate API (simulated)</div></div>
+          <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+        </div>
+
+        <div style="margin-top:12px" class="row">
+          <div class="col">
+            <input id="curAmount" type="number" placeholder="Amount" class="input" value="1"/>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <select id="curFrom" class="select">
+                <option value="USD">USD</option>
+                <option value="INR">INR</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="JPY">JPY</option>
+              </select>
+              <select id="curTo" class="select">
+                <option value="INR">INR</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="JPY">JPY</option>
+              </select>
+              <button id="curConvertBtn">Convert</button>
+            </div>
+            <div id="curOutput" style="margin-top:10px" class="muted result-box"></div>
+          </div>
+          <div class="col">
+            <div class="muted">Tip: For more currencies, edit the dropdown or add dynamic list.</div>
+          </div>
+        </div>
+      </div>
+      `;
+    }
+
+    function aiHTML(){
+      return `
+      <div class="tool-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><h2>🤖 AI Assistant (Gemini)</h2><div class="muted">Ask Gemini to summarize, re-write or explain text/files (simulated).</div></div>
+          <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+        </div>
+
+        <div style="margin-top:12px" class="row">
+          <div class="col">
+            <label class="muted">Enter prompt or paste text</label>
+            <textarea id="aiPrompt" class="input" style="min-height:160px" placeholder="Ask me anything..."></textarea>
+            <div style="margin-top:8px"><button id="aiAskBtn">Ask Gemini</button></div>
+          </div>
+          <div class="col">
+            <div class="muted">Response:</div>
+            <div id="aiOutput" style="margin-top:10px;white-space:pre-wrap" class="muted result-box"></div>
+          </div>
+        </div>
+      </div>
+      `;
+    }
+
+    function emiHTML(){
+      return `
+      <div class="tool-panel">
+        <h2>🏦 EMI Calculator</h2>
+        <div class="row" style="margin-top:12px">
+          <div class="col">
+            <input id="emiPrincipal" class="input" placeholder="Loan Amount (₹)" value="100000"/>
+            <input id="emiRate" class="input" placeholder="Annual Rate (%)" value="8.5"/>
+            <input id="emiTenure" class="input" placeholder="Tenure (months)" value="60"/>
+            <div style="margin-top:8px"><button id="emiCalcBtn">Calculate</button></div>
+            <div id="emiOutput" style="margin-top:10px" class="muted result-box"></div>
+          </div>
+        </div>
+      </div>
+      `;
+    }
+    
+    function qrHTML(){
+      return `
+      <div class="tool-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><h2>🔲 QR Code Generator</h2><div class="muted">Create QR codes from text or URLs</div></div>
+          <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+        </div>
+        
+        <div style="margin-top:12px" class="row">
+          <div class="col">
+            <label class="muted">Enter text or URL</label>
+            <textarea id="qrText" class="input" placeholder="Enter text or URL to generate QR code..." style="min-height:100px">https://example.com</textarea>
+            <div style="margin-top:8px">
+              <button id="generateQrBtn">Generate QR Code</button>
+              <button id="downloadQrBtn" style="display:none">Download QR Code</button>
+            </div>
+          </div>
+          <div class="col">
+            <div id="qrPreview" style="text-align:center"></div>
+          </div>
+        </div>
+      </div>
+      `;
+    }
+    
+    function passwordHTML(){
+      return `
+      <div class="tool-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><h2>🔐 Password Generator</h2><div class="muted">Create strong, secure passwords</div></div>
+          <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+        </div>
+        
+        <div style="margin-top:12px" class="row">
+          <div class="col">
+            <label class="muted">Password Length: <span id="lengthValue">12</span></label>
+            <input type="range" id="passwordLength" min="8" max="32" value="12" class="input" style="width:100%">
+            
+            <div style="margin-top:12px">
+              <label><input type="checkbox" id="includeUppercase" checked> Include Uppercase Letters</label><br>
+              <label><input type="checkbox" id="includeLowercase" checked> Include Lowercase Letters</label><br>
+              <label><input type="checkbox" id="includeNumbers" checked> Include Numbers</label><br>
+              <label><input type="checkbox" id="includeSymbols"> Include Symbols</label>
+            </div>
+            
+            <div style="margin-top:12px">
+              <button id="generatePasswordBtn">Generate Password</button>
+              <button id="copyPasswordBtn" style="display:none">Copy Password</button>
+            </div>
+          </div>
+          <div class="col">
+            <div class="muted">Generated Password:</div>
+            <div id="passwordDisplay" class="result-box" style="font-family:monospace;font-size:18px;text-align:center;padding:15px;margin-top:8px"></div>
+            <div class="progress-bar" style="margin-top:12px"><div id="strengthIndicator" class="progress-fill" style="width:0%"></div></div>
+            <div id="strengthText" class="muted" style="margin-top:8px">Password strength: </div>
+          </div>
+        </div>
+      </div>
+      `;
+    }
+    
+    function notepadHTML(){
+      return `
+      <div class="tool-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><h2>📝 Online Notepad</h2><div class="muted">Simple text editor with auto-save</div></div>
+          <div style="width:260px"><div class="ad-slot">Tool Ad Slot</div></div>
+        </div>
+        
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+            <div class="muted">Your notes are automatically saved</div>
+            <div>
+              <button id="clearNotesBtn">Clear Notes</button>
+              <button id="downloadNotesBtn">Download</button>
+            </div>
+          </div>
+          <textarea id="notepadText" class="input" style="min-height:300px" placeholder="Start typing your notes here..."></textarea>
+        </div>
+      </div>
+      `;
+    }
+
+    // --- attach behavior
+    function attachToolEvents(id){
+      if(id==='pdf'){
+        document.getElementById('pdfConvertBtn').onclick = async ()=>{
+          const f = document.getElementById('pdfFile').files[0];
+          if(!f) return alert('Select a PDF file');
+          
+          // Simulate progress
+          const progress = document.getElementById('pdfProgress');
+          progress.style.width = '0%';
+          for(let i = 0; i <= 100; i+=10) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            progress.style.width = i + '%';
+          }
+          
+          document.getElementById('pdfStatus').innerHTML = `
+            <div class="success">PDF conversion simulated successfully!</div>
+            <div class="muted">In a real implementation, this would convert your PDF to Word format.</div>
+          `;
+        };
+
+        document.getElementById('pdfSummaryBtn').onclick = async ()=>{
+          const promptText = document.getElementById('pdfSummaryInput').value.trim();
+          if(!promptText) return alert('Paste text to summarize or give instructions');
+          document.getElementById('pdfSummaryOutput').innerText = 'Simulating AI response...';
+          
+          // Simulate AI processing delay
+          setTimeout(() => {
+            document.getElementById('pdfSummaryOutput').innerText = 
+              "This is a simulated AI response. In a real implementation, this would use the Gemini API to analyze your text.\n\n" +
+              "For the text you provided, the AI might summarize it as follows:\n\n" +
+              "The document appears to contain content that would be processed by an AI system to extract key points and generate a concise summary.";
+          }, 1500);
+        };
+      }
+
+      if(id==='removebg'){
+        document.getElementById('removeBgBtn').onclick = async ()=>{
+          const f = document.getElementById('bgFile').files[0];
+          if(!f) return alert('Select image');
+          
+          // Simulate progress
+          const progress = document.getElementById('bgProgress');
+          progress.style.width = '0%';
+          for(let i = 0; i <= 100; i+=10) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            progress.style.width = i + '%';
+          }
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const img = document.getElementById('bgPreview');
+            img.src = e.target.result;
+            img.style.display = 'block';
+            document.getElementById('bgStatus').innerHTML = `
+              <div class="success">Background removal simulated!</div>
+              <div class="muted">In a real implementation, this would use remove.bg API.</div>
+            `;
+          };
+          reader.readAsDataURL(f);
+        };
+      }
+
+      if(id==='compress'){
+        document.getElementById('compressBtn').onclick = async ()=>{
+          const f = document.getElementById('compressFile').files[0];
+          if(!f) return alert('Select image');
+          
+          // Simulate progress
+          const progress = document.getElementById('compressProgress');
+          progress.style.width = '0%';
+          for(let i = 0; i <= 100; i+=10) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            progress.style.width = i + '%';
+          }
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const img = document.getElementById('compressPreview');
+            img.src = e.target.result;
+            img.style.display = 'block';
+            document.getElementById('compressStatus').innerHTML = `
+              <div class="success">Image compression simulated!</div>
+              <div class="muted">In a real implementation, this would use TinyPNG API.</div>
+            `;
+            document.getElementById('compressDownload').innerText = 'Download compressed image (simulated)';
+            document.getElementById('compressDownload').href = e.target.result;
+          };
+          reader.readAsDataURL(f);
+        };
+      }
+
+      if(id==='currency'){
+        document.getElementById('curConvertBtn').onclick = async ()=>{
+          const amt = parseFloat(document.getElementById('curAmount').value) || 1;
+          const from = document.getElementById('curFrom').value;
+          const to = document.getElementById('curTo').value;
+          
+          // Simulate API call delay
+          document.getElementById('curOutput').innerText = 'Fetching exchange rate...';
+          
+          setTimeout(() => {
+            // Simulated exchange rates
+            const rates = {
+              USD: { INR: 83.25, EUR: 0.92, GBP: 0.79, JPY: 150.50 },
+              INR: { USD: 0.012, EUR: 0.011, GBP: 0.0095, JPY: 1.81 },
+              EUR: { USD: 1.09, INR: 90.75, GBP: 0.86, JPY: 163.75 },
+              GBP: { USD: 1.27, INR: 105.50, EUR: 1.16, JPY: 190.25 },
+              JPY: { USD: 0.0066, INR: 0.55, EUR: 0.0061, GBP: 0.0053 }
+            };
+            
+            const rate = rates[from] && rates[from][to] ? rates[from][to] : 1;
+            const result = amt * rate;
+            
+            document.getElementById('curOutput').innerHTML = `
+              <div class="success">${amt} ${from} = ${result.toFixed(4)} ${to}</div>
+              <div class="muted">Exchange rate: 1 ${from} = ${rate.toFixed(4)} ${to} (simulated data)</div>
+            `;
+          }, 800);
+        };
+      }
+
+      if(id==='ai'){
+        document.getElementById('aiAskBtn').onclick = async ()=>{
+          const p = document.getElementById('aiPrompt').value.trim();
+          if(!p) return alert('Write a question or paste text to summarize');
+          document.getElementById('aiOutput').innerText = 'Simulating AI response...';
+          
+          setTimeout(() => {
+            const responses = [
+              "Based on your query, I can provide a simulated response. In a real implementation, this would use the Gemini API to generate intelligent answers.",
+              "This is a demonstration of how the AI assistant would work. The actual implementation would connect to Google's Gemini API for advanced natural language processing.",
+              "I understand you're asking about: " + p.substring(0, 50) + "... In a real system, I would analyze this thoroughly and provide a comprehensive response."
+            ];
+            
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            document.getElementById('aiOutput').innerText = randomResponse;
+          }, 1500);
+        };
+      }
+
+      if(id==='emi'){
+        document.getElementById('emiCalcBtn').onclick = ()=>{
+          const P = parseFloat(document.getElementById('emiPrincipal').value);
+          const annual = parseFloat(document.getElementById('emiRate').value);
+          const N = parseInt(document.getElementById('emiTenure').value);
+          if(!P || !annual || !N) return alert('Enter valid values');
+          
+          const r = annual/12/100;
+          const EMI = (P * r * Math.pow(1+r,N)) / (Math.pow(1+r,N)-1);
+          const total = EMI * N;
+          const interest = total - P;
+          
+          document.getElementById('emiOutput').innerHTML = `
+            <div class="success">EMI: ₹${EMI.toFixed(2)}</div>
+            <div>Total Payment: ₹${total.toFixed(2)}</div>
+            <div>Total Interest: ₹${interest.toFixed(2)}</div>
+          `;
+        };
+      }
+      
+      if(id==='qr'){
+        // QR Code functionality
+        document.getElementById('generateQrBtn').onclick = () => {
+          const text = document.getElementById('qrText').value.trim();
+          if (!text) return alert('Please enter text or URL for the QR code');
+          
+          const qrPreview = document.getElementById('qrPreview');
+          qrPreview.innerHTML = '<div class="muted">Generating QR code...</div>';
+          
+          // Simple QR code generation using a service
+          setTimeout(() => {
+            // Using a QR code API (free service)
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(text)}`;
+            qrPreview.innerHTML = `
+              <img src="${qrUrl}" alt="QR Code" style="border:1px solid #e6eefc; border-radius:8px; padding:10px;">
+              <div style="margin-top:10px">
+                <button id="downloadQrBtn">Download QR Code</button>
+              </div>
+            `;
+            
+            // Add download functionality
+            document.getElementById('downloadQrBtn').onclick = () => {
+              const link = document.createElement('a');
+              link.href = qrUrl;
+              link.download = 'qrcode.png';
+              link.click();
+            };
+          }, 500);
+        };
+      }
+      
+      if(id==='password'){
+        // Password generator functionality
+        const lengthSlider = document.getElementById('passwordLength');
+        const lengthValue = document.getElementById('lengthValue');
+        
+        lengthSlider.addEventListener('input', () => {
+          lengthValue.textContent = lengthSlider.value;
+        });
+        
+        document.getElementById('generatePasswordBtn').onclick = () => {
+          const length = parseInt(lengthSlider.value);
+          const hasUpper = document.getElementById('includeUppercase').checked;
+          const hasLower = document.getElementById('includeLowercase').checked;
+          const hasNumbers = document.getElementById('includeNumbers').checked;
+          const hasSymbols = document.getElementById('includeSymbols').checked;
+          
+          if (!hasUpper && !hasLower && !hasNumbers && !hasSymbols) {
+            alert('Please select at least one character type');
+            return;
+          }
+          
+          const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+          const numbers = '0123456789';
+          const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+          
+          let charPool = '';
+          if (hasUpper) charPool += uppercase;
+          if (hasLower) charPool += lowercase;
+          if (hasNumbers) charPool += numbers;
+          if (hasSymbols) charPool += symbols;
+          
+          let password = '';
+          for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charPool.length);
+            password += charPool[randomIndex];
+          }
+          
+          document.getElementById('passwordDisplay').textContent = password;
+          document.getElementById('copyPasswordBtn').style.display = 'inline-block';
+          
+          // Calculate strength
+          let strength = 0;
+          if (length >= 12) strength++;
+          if (hasUpper) strength++;
+          if (hasLower) strength++;
+          if (hasNumbers) strength++;
+          if (hasSymbols) strength++;
+          
+          const strengthIndicator = document.getElementById('strengthIndicator');
+          const strengthText = document.getElementById('strengthText');
+          
+          if (strength <= 2) {
+            strengthIndicator.style.width = '33%';
+            strengthIndicator.style.background = '#ef4444';
+            strengthText.textContent = 'Password strength: Weak';
+          } else if (strength <= 4) {
+            strengthIndicator.style.width = '66%';
+            strengthIndicator.style.background = '#f59e0b';
+            strengthText.textContent = 'Password strength: Medium';
+          } else {
+            strengthIndicator.style.width = '100%';
+            strengthIndicator.style.background = '#10b981';
+            strengthText.textContent = 'Password strength: Strong';
+          }
+        };
+        
+        document.getElementById('copyPasswordBtn').onclick = () => {
+          const password = document.getElementById('passwordDisplay').textContent;
+          navigator.clipboard.writeText(password).then(() => {
+            alert('Password copied to clipboard!');
+          });
+        };
+      }
+      
+      if(id==='notepad'){
+        // Notepad functionality
+        const notepadText = document.getElementById('notepadText');
+        
+        // Load saved notes
+        const savedNotes = localStorage.getItem('toolhub-notes');
+        if (savedNotes) {
+          notepadText.value = savedNotes;
+        }
+        
+        // Auto-save
+        notepadText.addEventListener('input', () => {
+          localStorage.setItem('toolhub-notes', notepadText.value);
+        });
+        
+        document.getElementById('clearNotesBtn').onclick = () => {
+          if (confirm('Are you sure you want to clear all notes?')) {
+            notepadText.value = '';
+            localStorage.removeItem('toolhub-notes');
+          }
+        };
+        
+        document.getElementById('downloadNotesBtn').onclick = () => {
+          const notes = notepadText.value;
+          if (!notes) {
+            alert('No notes to download');
+            return;
+          }
+          
+          const blob = new Blob([notes], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'my-notes.txt';
+          a.click();
+          URL.revokeObjectURL(url);
+        };
+      }
+    }
+
+  </script>
+</body>
+</html>
